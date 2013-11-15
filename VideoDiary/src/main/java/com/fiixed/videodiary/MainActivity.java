@@ -1,23 +1,26 @@
 package com.fiixed.videodiary;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
+import android.net.Uri;
 import android.os.Bundle;
-import android.app.ActionBar;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
-import java.util.List;
+import java.io.File;
+
 
 public class MainActivity extends Activity {
 
+    private static final int VIDEO_CAPTURE = 101;
+    private Uri fileUri;
     private ImageView mVidScreenshot;
 
     @Override
@@ -35,24 +38,31 @@ public class MainActivity extends Activity {
             }
         });
 
-        dispatchTakeVideoIntent();
-
-
 
     }
-    private void dispatchTakeVideoIntent() {
-        Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-        startActivityForResult(takeVideoIntent, 0);
+
+    public void startRecording() {
+        File mediaFile = new
+                File(Environment.getExternalStorageDirectory().getAbsolutePath()
+                + "/myvideo.mp4");
+
+        Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+        fileUri = Uri.fromFile(mediaFile);
+
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
+        startActivityForResult(intent, VIDEO_CAPTURE);
     }
 
-//    public static boolean isIntentAvailable(Context context, String action) {
-//        final PackageManager packageManager = context.getPackageManager();
-//        final Intent intent = new Intent(action);
-//        List<ResolveInfo> list =
-//                packageManager.queryIntentActivities(intent,
-//                        PackageManager.MATCH_DEFAULT_ONLY);
-//        return list.size() > 0;
-//    }
+
+
+    private boolean hasCamera() {
+        if (getPackageManager().hasSystemFeature(
+                PackageManager.FEATURE_CAMERA_FRONT)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -72,7 +82,7 @@ public class MainActivity extends Activity {
                 openSearch();
                 return true;
             case R.id.action_video:
-                dispatchTakeVideoIntent();
+                startRecording();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -80,6 +90,20 @@ public class MainActivity extends Activity {
     }
 
     private void openSearch() {
+    }
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == VIDEO_CAPTURE) {
+            if (resultCode == RESULT_OK) {
+                Toast.makeText(this, "Video has been saved to:\n" +
+                        data.getData(), Toast.LENGTH_LONG).show();
+            } else if (resultCode == RESULT_CANCELED) {
+                Toast.makeText(this, "Video recording cancelled.",
+                        Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(this, "Failed to record video",
+                        Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
 
