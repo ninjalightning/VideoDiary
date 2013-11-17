@@ -91,9 +91,10 @@ public class MainActivity extends Activity {
 
     private void openSearch() {
     }
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == VIDEO_CAPTURE) {
-            if (resultCode == RESULT_OK) {
+            if (resultCode == Activity.RESULT_OK) {
                 Toast.makeText(this, "Video has been saved to:\n" +
                         data.getData(), Toast.LENGTH_LONG).show();
             } else if (resultCode == RESULT_CANCELED) {
