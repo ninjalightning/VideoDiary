@@ -54,16 +54,6 @@ public class MainActivity extends Activity {
     }
 
 
-
-    private boolean hasCamera() {
-        if (getPackageManager().hasSystemFeature(
-                PackageManager.FEATURE_CAMERA_FRONT)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
