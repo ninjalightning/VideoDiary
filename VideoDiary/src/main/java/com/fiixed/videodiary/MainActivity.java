@@ -22,7 +22,7 @@ import java.io.File;
 public class MainActivity extends Activity {
 
     private static final String TAG = "com.fiixed.videodiary.MainActivity";
-    
+
     private ImageView mVidScreenshot;
 
     @Override
@@ -40,7 +40,7 @@ public class MainActivity extends Activity {
             }
         });
 
-        getCameraInstance();
+
 
 
     }
@@ -99,7 +99,7 @@ public class MainActivity extends Activity {
                 openSearch();
                 return true;
             case R.id.action_video:
-                startRecording();
+                getCameraInstance();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -109,9 +109,7 @@ public class MainActivity extends Activity {
     private void openSearch() {
     }
 
-    private void startRecording() {
 
-    }
 
 
 }
