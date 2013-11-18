@@ -3,10 +3,12 @@ package com.fiixed.videodiary;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -19,8 +21,8 @@ import java.io.File;
 
 public class MainActivity extends Activity {
 
-    private static final int VIDEO_CAPTURE = 101;
-    private Uri fileUri;
+    private static final String TAG = "com.fiixed.videodiary.MainActivity";
+    
     private ImageView mVidScreenshot;
 
     @Override
@@ -38,20 +40,45 @@ public class MainActivity extends Activity {
             }
         });
 
+        getCameraInstance();
+
 
     }
 
-    public void startRecording() {
-        File mediaFile = new
-                File(Environment.getExternalStorageDirectory().getAbsolutePath()
-                + "/myvideo.mp4");
-
-        Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-        fileUri = Uri.fromFile(mediaFile);
-
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
-        startActivityForResult(intent, VIDEO_CAPTURE);
+    /** A safe way to get an instance of the Camera object. */
+    public static Camera getCameraInstance(){
+        Camera c = null;
+        try {
+            c = openFrontFacingCamera(); // attempt to get a Camera instance
+        }
+        catch (Exception e){
+            // Camera is not available (in use or does not exist)
+        }
+        return c; // returns null if camera is unavailable
     }
+
+    /** iterate through the available cameras and choose the front facing one. */
+    private static Camera openFrontFacingCamera()
+    {
+        int cameraCount = 0;
+        Camera cam = null;
+        Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
+        cameraCount = Camera.getNumberOfCameras();
+        for ( int camIdx = 0; camIdx < cameraCount; camIdx++ ) {
+            Camera.getCameraInfo( camIdx, cameraInfo );
+            if ( cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_FRONT  ) {
+                try {
+                    cam = Camera.open( camIdx );
+                } catch (RuntimeException e) {
+                    Log.e(TAG, "Camera failed to open: " + e.getLocalizedMessage());
+                }
+            }
+        }
+
+        return cam;
+    }
+
+
 
 
     @Override
@@ -81,20 +108,9 @@ public class MainActivity extends Activity {
 
     private void openSearch() {
     }
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == VIDEO_CAPTURE) {
-            if (resultCode == Activity.RESULT_OK) {
-                Toast.makeText(this, "Video has been saved to:\n" +
-                        data.getData(), Toast.LENGTH_LONG).show();
-            } else if (resultCode == RESULT_CANCELED) {
-                Toast.makeText(this, "Video recording cancelled.",
-                        Toast.LENGTH_LONG).show();
-            } else {
-                Toast.makeText(this, "Failed to record video",
-                        Toast.LENGTH_LONG).show();
-            }
-        }
+
+    private void startRecording() {
+
     }
 
 
