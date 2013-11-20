@@ -47,15 +47,23 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_view);
 
-        mVidScreenshot = (ImageView) findViewById(R.id.vidScreenshotImageView);
-        mVidScreenshot.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
+        VideoAdapter videoAdapter = new VideoAdapter(getApplicationContext(), R.layout.row, myVideosArray);
 
-                startActivity(intent);
-            }
-        });
+        mListView = (ListView) findViewById(R.id.videoListView);
+
+        if (mListView != null) {
+            mListView.setAdapter(videoAdapter);
+        }
+
+//        mVidScreenshot = (ImageView) findViewById(R.id.vidImageView);
+//        mVidScreenshot.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
+//
+//                startActivity(intent);
+//            }
+//        });
 
 
     }

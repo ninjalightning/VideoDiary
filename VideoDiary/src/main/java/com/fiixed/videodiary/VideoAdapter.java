@@ -45,8 +45,8 @@ public class VideoAdapter extends ArrayAdapter<Video> {
         Video video = mData[position];
 
         //setting the view to the data we need to display
-        dateView.setText(video.mNameOfPlace);
-        tagsView.setText(video.mZipCode));
+        dateView.setText(video.mDate);
+        tagsView.setText(video.mTags);
 
         int resId = mContext.getResources().getIdentifier(video.mNameOfImage, "drawable", mContext.getPackageName());
         vidImageView.setImageResource(resId);
