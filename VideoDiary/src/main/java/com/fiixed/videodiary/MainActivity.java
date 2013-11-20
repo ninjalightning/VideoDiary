@@ -12,6 +12,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import java.io.File;
@@ -22,11 +23,29 @@ public class MainActivity extends Activity {
     private static final int VIDEO_CAPTURE = 101;
     private Uri fileUri;
     private ImageView mVidScreenshot;
+    private ListView mListView;
+    private VideoAdapter videoAdapter;
+
+    Video[] myVideosArray = new Video[]
+            {
+                    new Video("Wednesday 15th Nov, 2013", "home, birthday", "image01"),
+                    new Video("Tuesday 14th Nov, 2013", "home, happy", "image02"),
+                    new Video("Monday 13th Nov 2013", "work", "image03"),
+                    new Video("Tuesday 14th Nov, 2013", "home, happy", "image02"),
+                    new Video("Tuesday 14th Nov, 2013", "home, happy", "image02"),
+                    new Video("Tuesday 14th Nov, 2013", "home, happy", "image02"),
+                    new Video("Tuesday 14th Nov, 2013", "home, happy", "image02"),
+                    new Video("Tuesday 14th Nov, 2013", "home, happy", "image02"),
+                    new Video("Tuesday 14th Nov, 2013", "home, happy", "image02"),
+                    new Video("Tuesday 14th Nov, 2013", "home, happy", "image02"),
+                    new Video("Tuesday 14th Nov, 2013", "home, happy", "image02"),
+                    new Video("Tuesday 14th Nov, 2013", "home, happy", "image02"),
+            };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.row);
+        setContentView(R.layout.activity_list_view);
 
         mVidScreenshot = (ImageView) findViewById(R.id.vidScreenshotImageView);
         mVidScreenshot.setOnClickListener(new View.OnClickListener() {
